@@ -75,7 +75,6 @@ public class MovieFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        updateMovies();
     }
 
     @Override
@@ -83,8 +82,8 @@ public class MovieFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mGridView = (GridView) rootView.findViewById(R.id.gridView);
+        mGridData= new ArrayList<>();
         mPrograssBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        mGridData=new ArrayList<>();
         mGridAdapter= new GridViewAdapter(getActivity(),R.layout.grid_view_item,mGridData);
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -99,15 +98,38 @@ public class MovieFragment extends Fragment {
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
                 mPosition = savedInstanceState.getInt(SELECTED_KEY);
             }
+
+        if(savedInstanceState == null || !savedInstanceState.containsKey("key")) {
+            updateMovies();
+        }
         return rootView;
     }
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+
+            mGridData = savedInstanceState.getParcelableArrayList("key");
+            mGridAdapter= new GridViewAdapter(getActivity(),R.layout.grid_view_item,mGridData);
+            mGridView.setAdapter(mGridAdapter);
+            //mGridAdapter= new GridViewAdapter(getActivity(),R.layout.grid_view_item,mGridData);
+            mGridAdapter.setGridData(mGridData);
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("key",mGridData);
+        super.onSaveInstanceState(outState);
         if (mPosition != GridView.INVALID_POSITION) {
                 outState.putInt(SELECTED_KEY, mPosition);
             }
             super.onSaveInstanceState(outState);
         }
+    void onSortChanged( ) {
+        updateMovies();
+    }
     public void updateMovies()
     {
         mGridData.clear();
@@ -173,7 +195,6 @@ public class MovieFragment extends Fragment {
                 Toast.makeText(getActivity(), "Failed to fetch data!", Toast.LENGTH_SHORT).show();
             }
             mPrograssBar.setVisibility(View.GONE);
-
         }
     }
     String streamToString(InputStream stream) throws IOException {

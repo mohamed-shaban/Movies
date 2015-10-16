@@ -90,7 +90,7 @@ public class DetailFragment extends Fragment {
                     .setText(moviestr.getOverview());
         }
         if (intent != null && intent.hasExtra("Movie")) {
-            moviestr = (Movie) intent.getSerializableExtra("Movie");
+            moviestr = (Movie) intent.getParcelableExtra("Movie");
             ((TextView) rootView.findViewById(R.id.movie_title))
                     .setText(moviestr.getTitle());
             ((TextView) rootView.findViewById(R.id.movie_release_date))

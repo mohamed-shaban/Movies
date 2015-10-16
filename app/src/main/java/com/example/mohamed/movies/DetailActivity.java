@@ -62,7 +62,7 @@ public class DetailActivity extends ActionBarActivity {
         ImageButton fav = (ImageButton) findViewById(R.id.fav);
         SQLiteDatabase db = mhelper.getReadableDatabase();
         Intent intent = this.getIntent();
-            movie = (Movie) intent.getSerializableExtra("Movie");
+            movie = (Movie) intent.getParcelableExtra("Movie");
         Cursor cur = db.query(MovieContract.MovieEntry.TABLE_NAME,
                 new String[] {MovieContract.MovieEntry.title},
                 "mid=?",

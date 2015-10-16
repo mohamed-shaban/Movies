@@ -2,8 +2,10 @@ package com.example.mohamed.movies;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import android.widget.ImageButton;
 public class MainActivity extends ActionBarActivity implements MovieFragment.Callback {
     //Now we will be heading towards hooking the adapter to GridView and make it functional
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private String msort;
     MovieDbHelper mhelper = new MovieDbHelper(this);
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private boolean mTwoPane;
@@ -22,7 +25,7 @@ public class MainActivity extends ActionBarActivity implements MovieFragment.Cal
         if (mTwoPane) {
 
                     Bundle args = new Bundle();
-                    args.putSerializable("Movie", movie);
+                    args.putParcelable("Movie", movie);
 
                     DetailFragment fragment = new DetailFragment();
                     fragment.setArguments(args);
@@ -74,6 +77,10 @@ public class MainActivity extends ActionBarActivity implements MovieFragment.Cal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String sort = prefs.getString(getString(R.string.sort_syncConnectionType),
+                getString(R.string.pref_syncConnectionTypes_default));
+        msort=sort;
         if (findViewById(R.id.detail_container) != null) {
             if (savedInstanceState == null) {
                 mTwoPane=true;
@@ -112,14 +119,16 @@ public class MainActivity extends ActionBarActivity implements MovieFragment.Cal
     @Override
     protected void onResume() {
         super.onResume();
-         /* MovieFragment ff = (MovieFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String sort = prefs.getString(getString(R.string.sort_syncConnectionType),
+                getString(R.string.pref_syncConnectionTypes_default));
+
+        if (sort != null && !sort.equals(msort)) {
+            MovieFragment ff = (MovieFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
             if ( null != ff ) {
-               // ff.mGridAdapter.clear();
-               ff.updateMovies();
+                ff.onSortChanged();
             }
-        /*DetailFragment df = (DetailFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
-                   /* if ( null != df ) {
-                            df.up();
-                        }*/
+            msort = sort;
+        }
     }
 }
