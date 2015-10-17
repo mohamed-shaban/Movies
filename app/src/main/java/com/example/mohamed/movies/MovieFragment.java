@@ -51,8 +51,8 @@ public class MovieFragment extends Fragment {
     }
 
     public interface Callback {
-                        public void onItemSelected(Movie movie,int flag);
-            }
+        public void onItemSelected(Movie movie,int flag);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -96,8 +96,8 @@ public class MovieFragment extends Fragment {
             }
         });
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-                mPosition = savedInstanceState.getInt(SELECTED_KEY);
-            }
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
 
         if(savedInstanceState == null || !savedInstanceState.containsKey("key")) {
             updateMovies();
@@ -123,10 +123,10 @@ public class MovieFragment extends Fragment {
         outState.putParcelableArrayList("key",mGridData);
         super.onSaveInstanceState(outState);
         if (mPosition != GridView.INVALID_POSITION) {
-                outState.putInt(SELECTED_KEY, mPosition);
-            }
-            super.onSaveInstanceState(outState);
+            outState.putInt(SELECTED_KEY, mPosition);
         }
+        super.onSaveInstanceState(outState);
+    }
     void onSortChanged( ) {
         updateMovies();
     }

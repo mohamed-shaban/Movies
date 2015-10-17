@@ -61,7 +61,7 @@ public class DetailFragment extends Fragment {
             MovieDbHelper mhelper = new MovieDbHelper(getActivity());
             ImageButton fav = (ImageButton) rootView.findViewById(R.id.fav);
             SQLiteDatabase db = mhelper.getReadableDatabase();
-            moviestr = (Movie) arguments.getSerializable("Movie");
+            moviestr = (Movie) arguments.getParcelable("Movie");
             Cursor cur = db.query(MovieContract.MovieEntry.TABLE_NAME,
                     new String[] {MovieContract.MovieEntry.title},
                     "mid=?",

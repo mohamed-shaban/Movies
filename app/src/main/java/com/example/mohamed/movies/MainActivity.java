@@ -20,25 +20,25 @@ public class MainActivity extends ActionBarActivity implements MovieFragment.Cal
     private boolean mTwoPane;
     Movie movie;
     @Override
-        public void onItemSelected(Movie movie,int flag) {
+    public void onItemSelected(Movie movie,int flag) {
         this.movie=movie;
         if (mTwoPane) {
 
-                    Bundle args = new Bundle();
-                    args.putParcelable("Movie", movie);
+            Bundle args = new Bundle();
+            args.putParcelable("Movie", movie);
 
-                    DetailFragment fragment = new DetailFragment();
-                    fragment.setArguments(args);
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(args);
 
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.detail_container, fragment, DETAILFRAGMENT_TAG)
-                            .commit();
-                } else if(flag==0) {
-                    Intent intent = new Intent(this, DetailActivity.class)
-                            .putExtra("Movie",movie);
-                    startActivity(intent);
-                }
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        } else if(flag==0) {
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .putExtra("Movie",movie);
+            startActivity(intent);
         }
+    }
     public void Favorite(View view) {
         ImageButton fav = (ImageButton) view.findViewById(R.id.fav);
         if (fav.getTag() == 0)
@@ -124,8 +124,9 @@ public class MainActivity extends ActionBarActivity implements MovieFragment.Cal
                 getString(R.string.pref_syncConnectionTypes_default));
 
         if (sort != null && !sort.equals(msort)) {
-            MovieFragment ff = (MovieFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
-            if ( null != ff ) {
+            MovieFragment
+                 ff = (MovieFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
+                if ( null != ff ) {
                 ff.onSortChanged();
             }
             msort = sort;
